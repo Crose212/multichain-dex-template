@@ -49,8 +49,8 @@ contract Pool is Ownable {
 
     // -------- Internal functions ---------- //
 
-    function reserves(address token1, address token0, uint256 _poolId) internal view returns (uint256, uint256) {
-        return(pool)
+    function totalReserves(address token1, address token0, uint256 _poolId) internal view returns (uint256, uint256) {
+        return(reserve0, reserve1);
     }
 
     // -------- Owner functions ---------- //
