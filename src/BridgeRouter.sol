@@ -7,6 +7,5 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 contract BridgeRouter is Ownable, ReentrancyGuard {
 
     mapping(uint16 => mapping(uint256 => uint256)) public poolIndex;
-    mapping()
 
 }

@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-import "./libraries/SafeTransfer.sol";
+import "./libraries/TransferHelper.sol";
 
 import "./Router.sol";
 import "./BridgeRouter.sol";
@@ -35,32 +35,34 @@ contract Pool is Ownable {
         _;
     }
 
-    constructor(address _router, address _bridgeRouter) {
+    constructor(address _router, address _bridgeRouter, address _token0, address _token1) {
         require(_router != address(0) && _bridgeRouter != address(0), "Router address shoudn't be 0");
         router = Router(_router);
         bridgeRouter = BridgeRouter(_bridgeRouter);
+        token0 = IERC20(_token0);
+        token1 = IERC20(_token1);
     }
 
     // -------- External functions ---------- //
 
-    function tokenBalance(address token) public view returns (uint256) {
-        return ERC20(token).balanceOf(address(this));
+    function totalReserves() public view returns (uint256, uint256) {
+        return(reserve0, reserve1);
     }
-
     // -------- Internal functions ---------- //
 
-    function totalReserves(address token1, address token0, uint256 _poolId) internal view returns (uint256, uint256) {
-        return(reserve0, reserve1);
+    function updateReserves(uint _newReserve0, uint _newReserve1) internal {
+        reserve0 = _newReserve0;
+        reserve1 = _newReserve1;
     }
 
     // -------- Owner functions ---------- //
 
     function saveStuckToken(address stuckToken) external onlyOwner {
-        if (stuckToken == ETH_PLACEHOLDER_ADDR) {
-            SafeTransfer.safeTransferETH(msg.sender, address(this).balance);
+        if (stuckToken == NATIVE_ADDR) {
+            TransferHelper.safeTransferETH(msg.sender, address(this).balance);
         } else {
             uint256 amount = IERC20(stuckToken).balanceOf(address(this));
-            SafeTransfer.safeTransfer(stuckToken, msg.sender, amount);
+            TransferHelper.safeTransfer(stuckToken, msg.sender, amount);
         }
     }
 
