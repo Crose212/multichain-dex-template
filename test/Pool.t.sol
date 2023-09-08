@@ -12,7 +12,7 @@ contract PoolTest is Test {
     }
 
     function testReserves() public {
-        (uint reserve0, uint reserve1) = pool.totalReserves();
+        (uint256 reserve0, uint256 reserve1) = pool.totalReserves();
         assertEq(reserve0, 0);
         assertEq(reserve1, 0);
     }

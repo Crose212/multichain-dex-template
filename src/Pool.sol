@@ -20,12 +20,12 @@ contract Pool is Ownable {
     IERC20 public immutable token0;
     IERC20 public immutable token1;
 
-    uint public reserve0;
-    uint public reserve1;
-    uint public totalSupply;
-    mapping (address => uint) public rewards;
-    mapping(uint => uint) public claimable;
-    mapping(address => uint) public balanceOf;
+    uint256 public reserve0;
+    uint256 public reserve1;
+    uint256 public totalSupply;
+    mapping(address => uint256) public rewards;
+    mapping(uint256 => uint256) public claimable;
+    mapping(address => uint256) public balanceOf;
 
     Router public immutable router;
     BridgeRouter public immutable bridgeRouter;
@@ -51,48 +51,34 @@ contract Pool is Ownable {
     // -------- External functions ---------- //
 
     function totalReserves() public view returns (uint256, uint256) {
-        return(reserve0, reserve1);
+        return (reserve0, reserve1);
     }
 
-    function addLiquidity(
-        uint _amount0,
-        uint _amount1
-    ) external onlyRouter returns (uint shares) {
+    function addLiquidity(uint256 _amount0, uint256 _amount1) external onlyRouter returns (uint256 shares) {
         token0.transferFrom(msg.sender, address(this), _amount0);
         token1.transferFrom(msg.sender, address(this), _amount1);
 
         if (reserve0 > 0 || reserve1 > 0) {
-            require(
-                reserve0 * _amount1 == reserve1 * _amount0,
-                "x / y != dx / dy"
-            );
+            require(reserve0 * _amount1 == reserve1 * _amount0, "x / y != dx / dy");
         }
 
         if (totalSupply == 0) {
             shares = Math.sqrt(_amount0 * _amount1);
         } else {
-            shares = Math.min(
-                (_amount0 * totalSupply) / reserve0,
-                (_amount1 * totalSupply) / reserve1
-            );
+            shares = Math.min((_amount0 * totalSupply) / reserve0, (_amount1 * totalSupply) / reserve1);
         }
         require(shares > 0, "shares = 0");
         _mint(msg.sender, shares);
 
-        _updateReserves(
-            token0.balanceOf(address(this)),
-            token1.balanceOf(address(this))
-        );
+        _updateReserves(token0.balanceOf(address(this)), token1.balanceOf(address(this)));
 
         // TODO: Skeleton of a function, to remake
     }
 
-    function removeLiquidity(
-        uint256 _shares
-    ) external onlyRouter returns (uint amount0, uint amount1){
+    function removeLiquidity(uint256 _shares) external onlyRouter returns (uint256 amount0, uint256 amount1) {
         require(balanceOf[msg.sender] > 0, "No liquidity found for this address");
-        uint bal0 = token0.balanceOf(address(this));
-        uint bal1 = token1.balanceOf(address(this));
+        uint256 bal0 = token0.balanceOf(address(this));
+        uint256 bal1 = token1.balanceOf(address(this));
 
         amount0 = (_shares * bal0) / totalSupply;
         amount1 = (_shares * bal1) / totalSupply;
@@ -106,38 +92,31 @@ contract Pool is Ownable {
         // TODO: Skeleton of a function, to remake
     }
 
-    function removeLiquiditySingleToken(
-        uint256 _shares
-    ) external onlyRouter {
+    function removeLiquiditySingleToken(uint256 _shares) external onlyRouter {
         // require(balanceOf[msg.sender] > 0, "No liquidity found for this address");
         // uint bal0 = token0.balanceOf(address(this));
         // uint bal1 = token1.balanceOf(address(this));
         // TODO: Skeleton of a function, to remake
     }
 
-    function claimRewards(
-        uint256 _shares
-    ) external onlyRouter {
-        
-    }
-
+    function claimRewards(uint256 _shares) external onlyRouter {}
 
     function migrateLiquidity() external {
         // TODO
     }
     // -------- Internal functions ---------- //
 
-    function _burn(address _from, uint _amount) private {
+    function _burn(address _from, uint256 _amount) private {
         balanceOf[_from] -= _amount;
         totalSupply -= _amount;
     }
 
-    function _mint(address _to, uint _amount) private {
+    function _mint(address _to, uint256 _amount) private {
         balanceOf[_to] += _amount;
         totalSupply += _amount;
     }
 
-    function _updateReserves(uint _newReserve0, uint _newReserve1) internal {
+    function _updateReserves(uint256 _newReserve0, uint256 _newReserve1) internal {
         reserve0 = _newReserve0;
         reserve1 = _newReserve1;
     }
