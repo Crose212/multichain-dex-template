@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
+<<<<<<< HEAD
 
 interface IPool {
     
@@ -14,3 +15,5 @@ interface IPool {
     ) external;
 
 }
+=======
+>>>>>>> a0e2063 (1)
