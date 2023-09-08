@@ -20,6 +20,7 @@ contract Pool is Ownable {
     IERC20 public immutable token0;
     IERC20 public immutable token1;
 
+    uint256 public immutable fee;
     uint256 public reserve0;
     uint256 public reserve1;
     uint256 public totalSupply;
@@ -40,12 +41,13 @@ contract Pool is Ownable {
         _;
     }
 
-    constructor(address _router, address _bridgeRouter, address _token0, address _token1) {
+    constructor(address _router, address _bridgeRouter, address _token0, address _token1, uint256 _fee) {
         require(_router != address(0) && _bridgeRouter != address(0), "Router address shoudn't be 0");
         router = Router(_router);
         bridgeRouter = BridgeRouter(_bridgeRouter);
         token0 = IERC20(_token0);
         token1 = IERC20(_token1);
+        fee = _fee;
     }
 
     // -------- External functions ---------- //
