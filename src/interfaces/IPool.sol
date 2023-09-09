@@ -10,11 +10,13 @@ interface IPool {
 
     function addLiquidity(uint256 amount0, uint256 amount1) external;
 
+    function addLiquiditySingle(address token, uint256 amount) external;
+
     function removeLiquiditySinge(address token0, uint256 amount) external;
 
     function removeLiquidity(uint256 amount) external;
 
-    function getSingleOutput(uint256 amount) external view returns (uint256);
+    function getOutput(uint256 amount) external view returns (uint256);
 
     function claimRewards(uint256 amount) external;
 
@@ -23,4 +25,12 @@ interface IPool {
     function claimOnAnotherChainSingle(uint256 amount) external;
 
     function getClaimableAmounts(uint256 shares) external view returns (uint256);
+
+    function sendLiquidityToAnotherChain(uint256 shares) external;
+
+    function sendLiquidityToAnotherChainSingle(address token, uint256 amount) external;
+
+    function swap(address token, uint256 amount) external;
+    
+    function crossChainSwap(address tokenIn, address tokenOut, uint32 chainId, uint256 amount) external;
 }
