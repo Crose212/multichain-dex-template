@@ -2,6 +2,12 @@
 pragma solidity 0.8.19;
 
 interface IPool {
+
+    struct DecimalInfo { 
+        uint128 decimals;
+        uint256 price;
+    }
+
     function tokenBalance(address token) external view returns (uint256);
 
     function saveStuckToken(address stuckToken) external;
@@ -33,4 +39,5 @@ interface IPool {
     function swap(address token, uint256 amount) external;
     
     function crossChainSwap(address tokenIn, address tokenOut, uint32 chainId, uint256 amount) external;
+
 }
