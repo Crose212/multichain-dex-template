@@ -14,7 +14,7 @@ interface IRouter {
 
     function addLiquiditySingle(address poolAddress, address token, uint256 amount) external;
 
-    function removeLiquidity(address poolAddress, uint256 shares) external; 
+    function removeLiquidity(address poolAddress, uint256 shares) external;
 
     function removeLiquiditySingle(address poolAddress, address token, uint256 sshares) external;
 
@@ -25,6 +25,4 @@ interface IRouter {
     function removeLiquidityOnAnotherChain(address poolAddress, uint256 shares, uint32 chainId) external;
 
     function lockLiquidity(address poolAddress, uint256 amount0, uint256 amount1, bool burn) external;
-
-    
 }

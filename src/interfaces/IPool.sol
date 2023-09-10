@@ -3,9 +3,10 @@ pragma solidity 0.8.19;
 
 interface IPool {
 
-    struct DecimalInfo { 
-        uint128 decimals;
-        uint256 price;
+    struct TokenInfo {
+        uint128 priceDec;
+        uint256 quoteDec;
+        address oracle;
     }
 
     function tokenBalance(address token) external view returns (uint256);
@@ -37,7 +38,6 @@ interface IPool {
     function sendLiquidityToAnotherChainSingle(address token, uint256 amount) external;
 
     function swap(address token, uint256 amount) external;
-    
-    function crossChainSwap(address tokenIn, address tokenOut, uint32 chainId, uint256 amount) external;
 
+    function crossChainSwap(address tokenIn, address tokenOut, uint32 chainId, uint256 amount) external;
 }
